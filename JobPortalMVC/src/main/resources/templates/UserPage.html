@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        /* Add your CSS styles here */
+        /* This is just a basic example */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .content {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+        }
+        .user-info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .user-info h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .user-info p {
+            margin-bottom: 10px;
+            color: #666;
+        }
+        .user-info strong {
+            margin-right: 5px;
+            color: #333;
+        }
+        .input-field {
+            margin-bottom: 20px;
+        }
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .input-field input[type="text"],
+        .input-field input[type="password"],
+        .input-field input[type="file"] {
+            width: calc(100% - 100px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        .input-field input[type="file"] {
+            width: calc(100% - 160px);
+        }
+        .button-container {
+            text-align: center;
+        }
+        .button-container button,
+        .button-container a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none; /* added for anchor tag */
+            display: inline-block; /* added for anchor tag */
+        }
+        .button-container button:hover,
+        .button-container a:hover {
+            background-color: #0056b3;
+        }
+        .popup-form-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9998; /* Ensure the overlay is behind the popup */
+        }
+        .popup-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+        .popup-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .popup-form input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .popup-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .popup-form button:hover {
+            background-color: #0056b3;
+        }
+        .popup-form-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        }
+        .resume-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .resume-container span {
+            margin-right: 10px;
+        }
+        .resume-container a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .resume-icon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .message {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="Header"></div>
+
+<div class="content">
+    <h1 th:text="${userModel != null ? userModel.getName() : 'User Profile'}"></h1>
+    <div class="user-info">
+        <p th:if="${userModel != null}">
+            <strong>Email:</strong> <span th:text="${userModel.getEmail()}" th:unless="${userModel.getEmail() == null}">No data</span><br>
+            <strong>Title:</strong> <span th:text="${userModel.getTitle()}" th:unless="${userModel.getTitle() == null}">No data</span><br>
+            <strong>Job Preference:</strong> <span th:text="${userModel.getJobPreference()}" th:unless="${userModel.getJobPreference() == null}">No data</span><br>
+            <strong>Description:</strong> <span th:text="${userModel.getDescription()}" th:unless="${userModel.getDescription() == null}">No data</span><br>
+            <strong>Phone:</strong> <span th:text="${userModel.getPhone()}" th:unless="${userModel.getPhone() == null}">No data</span><br>
+            <strong>Role:</strong> <span th:text="${userModel.getRole()}" th:unless="${userModel.getRole() == null}">No data</span><br>
+        </p>
+    </div>
+    <div class="message" th:if="${message != null}" th:text="${message}"></div>
+    <div class="input-field" th:if="${userModel != null and userModel.getUserId() == user.getUserId() and userModel.getRole() == 'APPLICANT'}">
+        <label>Resume:</label>
+        <div class="resume-container">
+            <span th:if="${userModel.getResume() != null}">
+                <a th:href="@{'/Resume/' + ${userModel.getResume().getName()}}" target="_blank">
+                    <span class="resume-icon">&#x1F4C4;</span> <span th:text="${userModel.getResume().getName()}">View Resume</span>
+                </a>
+            </span>
+            <span th:unless="${userModel.getResume() != null}">No resume</span>
+        </div>
+    </div>
+    <div class="button-container" th:if="${userModel != null and userModel.getUserId() == user.getUserId() and userModel.getRole() == 'APPLICANT'}">
+        <button onclick="togglePopup('changePasswordForm')">Change Password</button>
+        <button onclick="togglePopup('changeResumeForm')">Change Resume</button>
+        <a href="/account/updateinfo" class="button">Update Info</a> <!-- Added class "button" -->
+    </div>
+    <div class="button-container" th:if="${userModel != null and userModel.getUserId() == user.getUserId() and userModel.getRole() == 'COMPANY'}">
+        <button onclick="togglePopup('changePasswordForm')">Change Password</button>
+        <a href="/account/updateinfo" class="button">Update Info</a> <!-- Added class "button" -->
+    </div>
+</div>
+
+<div id="changePasswordForm" class="popup-form">
+    <span class="popup-form-close" onclick="togglePopup('changePasswordForm')">x</span>
+    <h2>Change Password</h2>
+    <form action="/account/changepassword" method="post">
+        <label for="oldPassword">Old Password:</label>
+        <input type="password" id="oldPassword" name="oldPassword">
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" name="newPassword">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<div id="changeResumeForm" class="popup-form">
+    <span class="popup-form-close" onclick="togglePopup('changeResumeForm')">x</span>
+    <h2>Change Resume</h2>
+    <form action="/account/upload" method="post" enctype="multipart/form-data">
+        <label for="newResume">Choose New Resume:</label>
+        <input type="file" id="newResume" name="newResume">
+        <button type="submit">Upload</button>
+    </form>
+</div>
+
+<div class="popup-form-overlay" onclick="togglePopup('changePasswordForm')"></div>
+<div class="popup-form-overlay" onclick="togglePopup('changeResumeForm')"></div>
+
+<script>
+    function togglePopup(popupId) {
+        var popup = document.getElementById(popupId);
+        var overlay = document.querySelector('.popup-form-overlay');
+        if (popup.style.display === 'block') {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        } else {
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Info</title>
+    <style>
+        /* Add custom styles for register page */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        input[type="email"] {
+            background-color: #f9f9f9; /* Make email input readonly style */
+            cursor: not-allowed;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .alert {
+            background-color: #f44336;
+            color: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Include your header -->
+<div th:replace="Header"></div>
+
+<!-- Display error message if exists -->
+<div th:if="${message}" class="alert">
+    <p th:text="${message}"></p>
+</div>
+
+<!-- Your form goes here -->
+<form action="/account/updateinfo" method="post">
+
+    <h2>Update Info</h2>
+
+    <label for="name">UserName</label>
+    <input type="text" id="name" name="name" th:value="${userModel?.getName()}">
+    <br>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" th:value="${userModel?.getEmail()}" readonly>
+    <br>
+    <label for="title">Tile</label>
+    <input type="text" id="title" name="title" th:value="${userModel?.getTitle()}">
+    <br>
+    <label for="jobPreference">Job Preference</label>
+    <input type="text" id="jobPreference" name="jobPreference" th:value="${userModel?.getJobPreference()}">
+    <br>
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description" th:value="${userModel?.getDescription()}">
+    <br>
+    <label for="phone">Phone</label>
+    <input type="text" id="phone" name="phone" th:value="${userModel?.getPhone()}">
+    <br>
+    <input type="radio" name="role" value="COMPANY" th:checked="${userModel?.getRole() == 'COMPANY'}">
+    <label>Company</label>
+
+    <input type="radio" name="role" value="APPLICANT" th:checked="${userModel?.getRole() == 'APPLICANT'}">
+    <label>APPLICANT</label>
+    <br>
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

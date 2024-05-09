@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Details</title>
+    <style>
+        /* Your CSS styles here */
+        .job-details {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .job-field {
+            margin-bottom: 10px;
+        }
+        .job-field h2 { /* Style for the title */
+            margin: 0;
+            color: #333;
+            font-size: 24px; /* Increased font size for the title */
+        }
+        .job-field p {
+            margin: 0;
+        }
+        .job-actions {
+            margin-top: 20px; /* Increased margin for better spacing */
+        }
+        .job-actions form, .job-actions a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .apply-button, .save-button, .delete-button, .pause-button, .update-button, .show-resumes-button { /* Common styles for buttons */
+            padding: 12px 24px; /* Increased padding for a bigger button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-block; /* Ensure buttons are always displayed inline */
+        }
+        .apply-button:hover, .save-button:hover, .delete-button:hover, .pause-button:hover, .update-button:hover, .show-resumes-button:hover {
+            filter: brightness(85%); /* Reduce brightness on hover for all buttons */
+        }
+        .apply-button {
+            background-color: #007bff; /* Blue color */
+        }
+        .save-button {
+            background-color: #6c757d; /* Gray color */
+        }
+        .delete-button {
+            background-color: #d9534f; /* Red color */
+        }
+        .pause-button {
+            background-color: #28a745; /* Green color */
+        }
+        .update-button {
+            background-color: #ffc107; /* Yellow color */
+        }
+        .show-resumes-button {
+            background-color: #28a745; /* Green color */
+        }
+        .user-link {
+            color: #337ab7; /* Blue color for the user's name link */
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .user-link:hover {
+            color: #23527c; /* Darker blue color on hover */
+        }
+        .message {
+            margin-top: 20px; /* Space between header and message */
+            padding: 10px; /* Add padding */
+            border-radius: 5px; /* Add border radius */
+            background-color: #dff0d8; /* Light green background color */
+            color: #3c763d; /* Dark green text color */
+            border: 1px solid #d6e9c6; /* Light green border color */
+        }
+    </style>
+</head>
+<body>
+<div th:replace="Header"></div>
+
+<!-- Message container -->
+<div class="message" th:if="${message}">
+    <span th:text="${message}"></span>
+</div>
+
+<div class="job-details" th:if="${job != null}">
+    <!-- Title -->
+    <div class="job-field">
+        <h2 th:text="${job.getTitle()}"></h2> <!-- Use h2 for bigger title -->
+    </div>
+
+    <!-- City and Country -->
+    <div class="job-field" th:if="${job.getCity() != null or job.getCountry() != null}">
+        <h4>Location:</h4>
+        <p th:text="${job.getCity()} + ', ' + ${job.getCountry()}"></p> <!-- Combine city and country with a comma -->
+    </div>
+
+    <!-- Description -->
+    <div class="job-field" th:if="${job.getDescription() != null}">
+        <h4>Description:</h4>
+        <p th:text="${job.getDescription()}"></p>
+    </div>
+
+    <!-- Responsibilities -->
+    <div class="job-field" th:if="${job.getResponsibilities() != null}">
+        <h4>Responsibilities:</h4>
+        <p th:text="${job.getResponsibilities()}"></p>
+    </div>
+
+    <!-- Qualifications -->
+    <div class="job-field" th:if="${job.getQualifications() != null}">
+        <h4>Qualifications:</h4>
+        <p th:text="${job.getQualifications()}"></p>
+    </div>
+
+    <!-- Benefits -->
+    <div class="job-field" th:if="${job.getBenefits() != null}">
+        <h4>Benefits:</h4>
+        <p th:text="${job.getBenefits()}"></p>
+    </div>
+
+    <!-- User's Name -->
+    <div class="job-field" th:if="${job.getUser() != null}">
+        <h4>Posted By:</h4>
+        <p>
+            <a class="user-link" th:href="@{'/account/profile/' + ${job.getUser().getUserId()}}" th:text="${job.getUser().getName()}"></a>
+        </p>
+    </div>
+
+    <!-- Apply Button (only visible to applicants) -->
+    <div class="job-actions" th:if="${user.role == 'APPLICANT'}">
+        <a th:href="@{'/applicant/apply/job/' + ${job.getJobId()}}" class="apply-button">Apply Now</a>
+        <a th:href="@{'/applicant/savejob/' + ${job.getJobId()}}" class="save-button">Save Job</a>
+    </div>
+
+    <!-- Show Resumes Button (only visible to company) -->
+    <div class="job-actions" th:if="${user.role == 'COMPANY'}">
+        <a th:href="@{'/company/resumes/job/' + ${job.getJobId()}}" class="show-resumes-button">Show Resumes</a>
+        <a th:href="@{'/company/delete/job/' + ${job.getJobId()}}" class="delete-button">Delete</a>
+        <a th:href="@{'/company/pause/job/' + ${job.getJobId()}}" class="pause-button">Pause</a>
+        <a th:href="@{'/company/update/job/' + ${job.getJobId()}}" class="update-button">Update</a>
+    </div>
+</div>
+
+<!-- If job is null -->
+<div class="message" th:unless="${job}">
+    <span>Job details are not available.</span>
+</div>
+
+</body>
+</html>

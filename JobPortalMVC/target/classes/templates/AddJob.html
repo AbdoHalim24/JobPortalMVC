@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Job</title>
+    <style>
+        /* Add custom styles for add job page */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .alert {
+            background-color: #f44336;
+            color: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Include your header -->
+<div th:replace="Header"></div>
+
+<!-- Display error message if exists -->
+<div th:if="${message}" class="alert">
+    <p th:text="${message}"></p>
+</div>
+
+<!-- Your form goes here -->
+<form action="/company/job" method="post" class="container">
+
+    <h2>Add Job</h2>
+
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" th:value="${jobModel?.getTitle()}">
+    <br>
+    <label for="description">Description</label>
+    <textarea id="description" name="description" th:text="${jobModel?.getDescription()}"></textarea>
+    <br>
+    <label for="qualifications">Qualifications</label>
+    <textarea id="qualifications" name="qualifications" th:text="${jobModel?.getQualifications()}"></textarea>
+    <br>
+    <label for="country">Country</label>
+    <input type="text" id="country" name="country" th:value="${jobModel?.getCountry()}">
+    <br>
+    <label for="city">City</label>
+    <input type="text" id="city" name="city" th:value="${jobModel?.getCity()}">
+    <br>
+    <label for="benefits">Benefits</label>
+    <textarea id="benefits" name="benefits" th:text="${jobModel?.getBenefits()}"></textarea>
+    <br>
+    <label for="responsibilities">Responsibilities</label>
+    <textarea id="responsibilities" name="responsibilities" th:text="${jobModel?.getResponsibilities()}"></textarea>
+    <br>
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

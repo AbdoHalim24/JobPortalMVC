@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume List</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style for the header */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Style for the main content */
+        .content {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 1200px; /* Set a maximum width for better readability */
+        }
+
+        /* Style for the resume list */
+        .resume-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .resume-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px; /* Reduced padding */
+            margin-bottom: 20px; /* Increased margin */
+            transition: all 0.3s ease;
+            position: relative; /* Make the container for absolute positioning */
+        }
+
+        .resume-item:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+        }
+
+        .resume-item h2 {
+            margin-top: 0;
+            margin-bottom: 10px; /* Add spacing below heading */
+            font-size: 20px;
+            color: #333;
+        }
+
+        .resume-item p {
+            margin: 0;
+            color: #666;
+        }
+
+        .resume-item .email {
+            font-weight: bold;
+            color: #007bff; /* Blue color for email */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .resume-item .email:hover {
+            color: #004085; /* Darker blue on hover */
+        }
+
+        /* Style for the resume icon */
+        .resume-icon {
+            font-size: 24px;
+            margin-right: 5px;
+            color: #007bff;
+        }
+
+        /* Style for the view resume link */
+        .view-resume-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .view-resume-link:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Style for the download button */
+        .download-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #28a745; /* Green color for button */
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none; /* Remove default underline */
+        }
+
+        .download-button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="Header"></div>
+
+<div class="content">
+    <header>
+        <h3>Resume List</h3>
+    </header>
+
+    <!-- Resume List -->
+    <ul class="resume-list">
+        <li th:each="resume : ${resumes}" class="resume-item">
+            <h2 th:text="${resume.getName()}"></h2>
+            <p class="email">
+                <a th:text="${resume.getUser().getEmail()}" th:href="@{'/account/profile/' + ${resume.getUser().getUserId()}}"></a>
+                <!-- Check if resume exists -->
+                <span th:if="${resume.getUser().getResume() != null}">
+                    <!-- Download button -->
+                    <a th:href="@{'/Resume/' + ${resume.getUser().getResume().getName()}}" class="download-button" download>
+                        <!-- Resume icon -->
+                        <span class="resume-icon">&#x1F4E5;</span>
+                        Download Resume
+                    </a>
+                </span>
+            </p>
+            <div class="details">
+                <!-- Add more details here as needed -->
+            </div>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

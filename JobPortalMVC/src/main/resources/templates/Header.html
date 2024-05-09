@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* styles.css */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 24px; /* Increase font size */
+            padding: 10px; /* Add padding */
+            margin-right: auto; /* Push the logo to the left */
+        }
+
+        .logout {
+            margin-left: auto; /* Push the logout link to the right */
+        }
+
+        .logout a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            cursor: pointer; /* Change cursor to pointer */
+        }
+
+        .logout a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .account-info {
+            display: flex;
+            align-items: center;
+            margin-right: auto; /* Push the account info to the left */
+            margin-left: auto; /* Push the account info to the right */
+        }
+
+        .account-icon {
+            font-size: 28px; /* Increase font size */
+            color: #fff; /* Set color to white */
+            margin-right: 10px; /* Add margin to the right */
+        }
+
+        .account-icon i {
+            color: white; /* Set icon color to white */
+        }
+
+        .account-name {
+            color: #fff; /* Set color to white */
+            font-weight: bold;
+            cursor: pointer; /* Change cursor to pointer */
+        }
+
+        .account-name:hover {
+            text-decoration: none; /* Remove underline on hover */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: right; /* Align the links to the right */
+        }
+
+        nav ul li {
+            display: inline; /* Display list items inline */
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px; /* Padding for the links */
+            margin-left: 10px; /* Add margin between links */
+            border: 1px solid transparent;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/public/home">Jobs</a>
+    </div>
+    <nav>
+        <ul>
+            <li>
+                <a th:if="${user != null && user.getRole() == 'APPLICANT'}" href="/applicant/savedjobs">Saved Jobs</a> <!-- Adjust font size -->
+            </li>
+        </ul>
+    </nav>
+    <div th:if="${user != null}" class="account-info">
+        <a th:href="@{'/account/profile/' + ${user.getUserId()}}" style="text-decoration: none; display: flex; align-items: center;">
+            <div class="account-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="account-name" th:text="${user.getName()}"></div>
+        </a>
+        <div class="logout">
+            <a href="/public/logout">Logout</a>
+        </div>
+    </div>
+    <div th:if="${user == null}">
+        <div class="logout">
+            <a href="/public/login">Login</a>
+        </div>
+    </div>
+
+
+</header>
+
+</body>
+</html>
